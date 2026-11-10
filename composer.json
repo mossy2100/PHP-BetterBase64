@@ -1,0 +1,93 @@
+{
+    "name": "mossy2100/better-base64",
+    "description": "Base64 encoding for PHP that preserves sort order, using URL-, HTML- and filename-safe characters.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "php",
+        "base64",
+        "encoding",
+        "decoding",
+        "sortable",
+        "order-preserving",
+        "url-safe",
+        "filename-safe"
+    ],
+    "authors": [
+        {
+            "name": "Shaun Moss",
+            "email": "mossy2100@gmail.com"
+        }
+    ],
+    "homepage": "https://github.com/mossy2100/PHP-BetterBase64",
+    "support": {
+        "issues": "https://github.com/mossy2100/PHP-BetterBase64/issues",
+        "source": "https://github.com/mossy2100/PHP-BetterBase64"
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../Core",
+            "options": {
+                "symlink": true,
+                "versions": {
+                    "mossy2100/core": "4.0.1"
+                }
+            }
+        },
+        {
+            "type": "path",
+            "url": "../CodingStandard",
+            "options": {
+                "symlink": true,
+                "versions": {
+                    "mossy2100/coding-standard": "2.2.0"
+                }
+            }
+        }
+    ],
+    "require": {
+        "php": "^8.4",
+        "mossy2100/core": "^4.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0 || ^11.0 || ^12.0",
+        "squizlabs/php_codesniffer": "^4.0",
+        "phpstan/phpstan": "^2.1",
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+        "mossy2100/coding-standard": "^2.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        },
+        "platform": {
+            "php": "8.4.0"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Mossy2100\\BetterBase64\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Mossy2100\\BetterBase64\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "fix": "vendor/bin/phpcbf -vp",
+        "check": "vendor/bin/phpcs -sv --colors",
+        "report": "vendor/bin/phpcs -q --report=summary",
+        "analyze": "scripts/analyze",
+        "test": "@php -d xdebug.mode=coverage vendor/bin/phpunit --coverage-html build/coverage --coverage-clover build/logs/clover.xml --do-not-cache-result",
+        "coverage": "@php scripts/coverage-check.php",
+        "quality": [
+            "@fix",
+            "@check",
+            "@analyze",
+            "@test",
+            "@coverage"
+        ]
+    }
+}

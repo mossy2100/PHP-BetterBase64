@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<ruleset name="Jumbo">
+    <description>Coding standard for the Mossy2100 packages by Shaun Moss.</description>
+
+    <!-- Paths to check -->
+    <file>src</file>
+    <file>tests</file>
+
+    <!-- Use the Jumbo Coding Standard (PER Coding Style 3.1 plus house rules) -->
+    <rule ref="Jumbo"/>
+</ruleset>
