@@ -69,7 +69,7 @@ The alphabet, in ASCII order:
 	- **upper-case hexadecimal** ([RFC 4648 §8](https://www.rfc-editor.org/rfc/rfc4648#section-8)) for `0-F`
 	- **base32hex** ([RFC 4648 §7](https://www.rfc-editor.org/rfc/rfc4648#section-7)) for `0-V`
 
-So `9` is 9, `F` is 15 and `V` is 31, exactly as you'd expect. Anyone can read a digit's value at a glance.
+So `9` is 9, `F` is 15 and `V` is 31, exactly as you'd expect.
 
 ### URL-safe and HTML-safe
 
@@ -78,7 +78,7 @@ Every character BetterBase64 outputs, digits and padding alike, is an *unreserve
 so `rawurlencode()` leaves an encoded string unchanged. Drop one into a path segment, a query string or a fragment, and
 it needs no escaping at all.
 
-The alphabet leaves out every character that has a special meaning in a URL or in HTML:
+The alphabet omits every character that has a special meaning in a URL or in HTML:
 
 | Context        | Characters left out                   |
 | -------------- | ------------------------------------- |
