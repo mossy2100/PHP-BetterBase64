@@ -7,6 +7,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- **Changed the alphabet to make encodings fully URL-safe (breaking).** The digits `{` and `}` are replaced by `_` and
+  `~`, and the pad character `-` is replaced by `.`. Every character is now an unreserved URL character (RFC 3986), so
+  `rawurlencode()` leaves encoded strings unchanged.
+  - `_` has value 36, so `a-z` move from 36-61 to 37-62, and `~` has value 63. `0-9` and `A-Z` keep values 0-35, so
+    upper-case hex and base32hex compatibility is unchanged.
+  - The pad is `.` rather than `-` because `-` is a base64url digit, so a padded string passed to a base64url decoder
+    by mistake fails instead of decoding to the wrong data.
+  - Strings encoded with 1.0.0 won't decode. Re-encode stored data, or decode it with 1.0.0 first.
+
 ## [1.0.0] - 2026-11-11
 
 ### Added

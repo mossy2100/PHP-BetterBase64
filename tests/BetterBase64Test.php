@@ -27,15 +27,16 @@ final class BetterBase64Test extends TestCase
     {
         return [
             'empty' => ['', '', ''],
-            '1 byte' => ['f', 'PW', 'PW--'],
-            '2 bytes' => ['fo', 'Pcy', 'Pcy-'],
-            '3 bytes' => ['foo', 'Pczl', 'Pczl'],
-            '4 bytes' => ['foob', 'PczlOW', 'PczlOW--'],
-            '5 bytes' => ['fooba', 'PczlOc4', 'PczlOc4-'],
-            '6 bytes' => ['foobar', 'PczlOc5o', 'PczlOc5o'],
-            'zero byte' => ["\x00", '00', '00--'],
-            'max bytes' => ["\xff\xff\xff", '}}}}', '}}}}'],
-            'sentence' => ['Hello, world!', 'I6LiR6yi87TlScna8G', 'I6LiR6yi87TlScna8G--'],
+            '1 byte' => ['f', 'PW', 'PW..'],
+            '2 bytes' => ['fo', 'Pbx', 'Pbx.'],
+            '3 bytes' => ['foo', 'Pbyk', 'Pbyk'],
+            '4 bytes' => ['foob', 'PbykOW', 'PbykOW..'],
+            '5 bytes' => ['fooba', 'PbykOb4', 'PbykOb4.'],
+            '6 bytes' => ['foobar', 'PbykOb5n', 'PbykOb5n'],
+            'zero byte' => ["\x00", '00', '00..'],
+            'max byte' => ["\xff", '~l', '~l..'],
+            'max bytes' => ["\xff\xff\xff", '~~~~', '~~~~'],
+            'sentence' => ['Hello, world!', 'I6LhR6xh87TkSbm_8G', 'I6LhR6xh87TkSbm_8G..'],
         ];
     }
 
@@ -49,16 +50,18 @@ final class BetterBase64Test extends TestCase
         return [
             'invalid character' => ['AB C'],
             'standard base64 character' => ['AB+/'],
-            'pad character in the middle' => ['A-BC'],
+            'base64url character' => ['AB-C'],
+            'brace' => ['AB{}'],
+            'pad character in the middle' => ['A.BC'],
             '1 digit' => ['G'],
             '4n + 1 digits' => ['ABCDE'],
-            'padding only' => ['----'],
-            'padding on a full quartet' => ['ABCD-'],
-            'too little padding' => ['G0-'],
-            'too much padding' => ['G0---'],
+            'padding only' => ['....'],
+            'padding on a full quartet' => ['ABCD.'],
+            'too little padding' => ['G0.'],
+            'too much padding' => ['G0...'],
             'non-canonical 2-digit group' => ['G1'],
             'non-canonical 3-digit group' => ['ABD'],
-            'non-canonical padded group' => ['ABD-'],
+            'non-canonical padded group' => ['ABD.'],
         ];
     }
 
@@ -94,13 +97,19 @@ final class BetterBase64Test extends TestCase
     }
 
     /**
-     * Test encode() uses only URL-, HTML- and filename-safe characters.
+     * Test encode() uses only unreserved URL characters, which rawurlencode() leaves unchanged.
      */
-    public function testEncodeUsesSafeCharacters(): void
+    public function testEncodeUsesUrlSafeCharacters(): void
     {
         $data = implode('', array_map(chr(...), range(0, 255)));
-        $this->assertMatchesRegularExpression('/^[0-9A-Za-z{}]*$/', BetterBase64::encode($data));
-        $this->assertMatchesRegularExpression('/^[0-9A-Za-z{}]*-*$/', BetterBase64::encode($data . 'x', true));
+
+        $unpadded = BetterBase64::encode($data);
+        $this->assertMatchesRegularExpression('/^[0-9A-Z_a-z~]*$/', $unpadded);
+        $this->assertSame($unpadded, rawurlencode($unpadded));
+
+        $padded = BetterBase64::encode($data . 'x', true);
+        $this->assertMatchesRegularExpression('/^[0-9A-Z_a-z~]*\.*$/', $padded);
+        $this->assertSame($padded, rawurlencode($padded));
     }
 
     #endregion

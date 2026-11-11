@@ -12,9 +12,8 @@ use DomainException;
  * The unique feature of this encoding is that encoded strings sort in the same order as the original strings, with or
  * without padding.
  *
- * The digit characters and the pad character are also safe to use in HTML and filenames. They aren't URL-safe, since
- * RFC 3986 doesn't allow '{' and '}' in URLs, although browsers accept them. Use base64url if URL safety matters more
- * than sort order.
+ * The digits and the pad character are all unreserved URL characters (RFC 3986), so they never need escaping in a URL.
+ * They're also HTML-safe: encoded strings can appear in HTML text content or attribute values without escaping.
  */
 final class BetterBase64
 {
@@ -23,12 +22,15 @@ final class BetterBase64
     /**
      * The digits, in ascending order of both value and byte value, so encoded strings sort like the originals.
      */
-    private const string DIGITS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz{}';
+    private const string DIGITS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~';
 
     /**
      * The pad character. It sorts before every digit, so padded encodings keep the sort order too.
+     *
+     * It's '.' rather than '-' because '-' is a base64url digit, so a padded string passed to a base64url decoder by
+     * mistake fails instead of decoding to the wrong data.
      */
-    private const string PAD_CHAR = '-';
+    private const string PAD_CHAR = '.';
 
     #endregion
 
@@ -227,7 +229,7 @@ final class BetterBase64
 
         // Check the characters.
         if (strspn($digitString, self::DIGITS) !== $nDigits) {
-            return 'Encoded strings can only contain digits, letters and braces, optionally followed by padding.';
+            return "Encoded strings can only contain digits, letters, '_' and '~', optionally followed by padding.";
         }
 
         // Check the number of digits. 2 digits encode 1 byte, 3 digits encode 2 bytes, and 4 digits encode 3 bytes, so
