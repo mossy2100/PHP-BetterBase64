@@ -1,6 +1,6 @@
 # Mossy2100 PHP BetterBase64
 
-Base64 encoding for PHP that preserves sort order, using characters that are safe in URLs, HTML and filenames.
+Base64 encoding for PHP that preserves sort order, using characters that are safe in HTML and filenames.
 
 **[License](LICENSE)** | **[Changelog](CHANGELOG.md)** | **[Documentation](docs/)**
 
@@ -10,9 +10,9 @@ Base64 encoding for PHP that preserves sort order, using characters that are saf
 
 ## Description
 
-Base64 is everywhere, but its alphabet was never designed for ordering, or filenames or URLs. Its digits run `A-Z`, `a-z`, `0-9`, `+`, `/`,
-nowhere near ASCII order. So the moment you sort base64 strings, in a database index, a file listing or a key-value
-store, the order of the original data is lost:
+Base64 is everywhere, but its alphabet was never designed for ordering or filenames. Its digits run `A-Z`, `a-z`, `0-9`,
+`+`, `/`, nowhere near ASCII order. So the moment you sort base64 strings, in a database index, a file listing or a
+key-value store, the order of the original data is lost:
 
 ```php
 base64_encode("\x00");        // 'AA=='
@@ -61,9 +61,9 @@ lower-case letters, then `{` and `}`.
   for `0-V`.
 - So `5` is 5, `F` is 15 and `V` is 31, exactly as you'd expect. Anyone can read a digit's value at a glance.
 
-### Safe to drop in almost anywhere
+### Safe in HTML and filenames
 
-The alphabet deliberately leaves out every character that commonly needs escaping or causes confusion:
+The alphabet deliberately leaves out the characters that commonly need escaping or cause confusion:
 
 | Context         | Characters left out                 |
 | --------------- | ----------------------------------- |
@@ -71,12 +71,24 @@ The alphabet deliberately leaves out every character that commonly needs escapin
 | URL delimiters  | `@ / ? & = # % + [ ] ! $ ( ) * , ;` |
 | Number notation | `. , _`                             |
 
-Encoded strings can go into HTML attributes, query strings, JSON, filenames and identifiers without a second layer of
-escaping, and `-` is a safer pad character than base64's `=`, which has a special meaning in both HTML and URLs.
+Encoded strings can go into HTML attributes, JSON, filenames and identifiers without a second layer of escaping, and `-`
+is a safer pad character than base64's `=`, which is a delimiter in URL query strings.
 
-> [!NOTE]
-> RFC 3986 doesn't list `{` and `}` as URL characters, so strict encoders such as PHP's `rawurlencode()` escape them
-> (`%7B`, `%7D`). Browsers and servers accept them unescaped.
+> [!IMPORTANT]
+> **BetterBase64 isn't URL-safe.** RFC 3986 doesn't allow `{` and `}` in URLs, so `rawurlencode()` escapes them as `%7B`
+> and `%7D`.
+>
+> In practice, browsers accept `{` and `}` in URLs, so a link containing an encoded string works without escaping.
+> However, a browser may percent-encode them in the path before sending the request, so decode the URL path (most
+> frameworks do this already) before decoding the string.
+>
+> If you need URL-safe strings and don't need sort order, use base64url
+> ([RFC 4648 §5](https://www.rfc-editor.org/rfc/rfc4648#section-5)) instead:
+>
+> ```php
+> $encoded = rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+> $decoded = base64_decode(strtr($encoded, '-_', '+/'));
+> ```
 
 ### Canonical and strict
 
@@ -91,13 +103,15 @@ in the standard UUID format.
 
 ### At a glance
 
-| Feature                     | base64  | base64url | BetterBase64 |
-| --------------------------- | ------- | --------- | ------------ |
-| Sorts like the data         | No      | No        | Yes          |
-| Digit values match hex      | No      | No        | Yes          |
-| Pad character               | `=`     | `=`       | `-`          |
-| Unique encoding enforced    | No      | No        | Yes          |
-| Escaped by `rawurlencode()` | `+ / =` | `=`       | `{ }`        |
+| Feature                     | base64     | base64url  | BetterBase64 |
+| --------------------------- | ---------- | ---------- | ------------ |
+| Sorts like the data         | No         | No         | Yes          |
+| URL-safe                    | No         | Yes        | No           |
+| Filename-safe               | No         | Yes        | Yes          |
+| Digit values match hex      | No         | No         | Yes          |
+| Pad character               | `=`        | `=`        | `-`          |
+| Rejects non-canonical input | Not in PHP | Not in PHP | Yes          |
+| Escaped by `rawurlencode()` | `+ / =`    | `=`        | `{ }`        |
 
 ---
 
@@ -122,7 +136,8 @@ The code is checked with:
 ## Requirements
 
 - PHP ^8.4
-- mossy2100/core
+
+No other dependencies.
 
 ---
 

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Mossy2100\BetterBase64\Tests;
 
+use DomainException;
 use Mossy2100\BetterBase64\BetterBase64;
-use Mossy2100\Core\Exceptions\FormatException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -135,12 +135,12 @@ final class BetterBase64Test extends TestCase
     }
 
     /**
-     * Test decode() throws a FormatException for an invalid encoding.
+     * Test decode() throws a DomainException for an invalid encoding.
      */
     #[DataProvider('provideInvalidEncodings')]
     public function testDecodeThrowsForInvalidEncoding(string $encoded): void
     {
-        $this->expectException(FormatException::class);
+        $this->expectException(DomainException::class);
         BetterBase64::decode($encoded);
     }
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Mossy2100\BetterBase64;
 
-use Mossy2100\Core\Exceptions\FormatException;
+use DomainException;
 
 /**
  * Encodes binary strings into a custom base64 format, and decodes them back into binary.
@@ -12,7 +12,9 @@ use Mossy2100\Core\Exceptions\FormatException;
  * The unique feature of this encoding is that encoded strings sort in the same order as the original strings, with or
  * without padding.
  *
- * The digit characters and the pad character are also safe to use in URLs, HTML and filenames.
+ * The digit characters and the pad character are also safe to use in HTML and filenames. They aren't URL-safe, since
+ * RFC 3986 doesn't allow '{' and '}' in URLs, although browsers accept them. Use base64url if URL safety matters more
+ * than sort order.
  */
 final class BetterBase64
 {
@@ -119,14 +121,14 @@ final class BetterBase64
      *
      * @param string $encoded The base64 encoded string, with or without padding.
      * @return string The binary string.
-     * @throws FormatException If the string isn't a valid encoding.
+     * @throws DomainException If the string isn't a valid encoding.
      */
     public static function decode(string $encoded): string
     {
         // Check the string.
         $error = self::findError($encoded);
         if ($error !== null) {
-            throw new FormatException($error);
+            throw new DomainException($error);
         }
 
         // Trim the padding.

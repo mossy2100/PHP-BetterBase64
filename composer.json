@@ -1,6 +1,6 @@
 {
     "name": "mossy2100/better-base64",
-    "description": "Base64 encoding for PHP that preserves sort order, using URL-, HTML- and filename-safe characters.",
+    "description": "Base64 encoding for PHP that preserves sort order, using HTML- and filename-safe characters.",
     "type": "library",
     "license": "MIT",
     "keywords": [
@@ -10,7 +10,6 @@
         "decoding",
         "sortable",
         "order-preserving",
-        "url-safe",
         "filename-safe"
     ],
     "authors": [
@@ -27,16 +26,6 @@
     "repositories": [
         {
             "type": "path",
-            "url": "../Core",
-            "options": {
-                "symlink": true,
-                "versions": {
-                    "mossy2100/core": "4.0.1"
-                }
-            }
-        },
-        {
-            "type": "path",
             "url": "../CodingStandard",
             "options": {
                 "symlink": true,
@@ -47,8 +36,7 @@
         }
     ],
     "require": {
-        "php": "^8.4",
-        "mossy2100/core": "^4.0"
+        "php": "^8.4"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.0 || ^11.0 || ^12.0",

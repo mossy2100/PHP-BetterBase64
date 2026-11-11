@@ -1,6 +1,6 @@
 # BetterBase64
 
-Base64 encoding that preserves sort order, using characters that are safe in URLs, HTML and filenames.
+Base64 encoding that preserves sort order, using characters that are safe in HTML and filenames.
 
 ---
 
@@ -26,7 +26,9 @@ byte gives the same result as comparing the original binary strings.
 ### Key features
 
 - **Order-preserving** - Encoded strings sort in the same order as the original strings, with or without padding.
-- **Safe characters** - No character needs escaping in a URL, HTML or a filename.
+- **Safe characters** - No character needs escaping in HTML or a filename.
+- **Not URL-safe** - `{` and `}` aren't valid URL characters, although browsers accept them. See the
+  [README](../README.md#safe-in-html-and-filenames) for details, and for base64url, the URL-safe alternative.
 - **Optional padding** - A final group of 1 or 2 bytes encodes as 2 or 3 digits, optionally padded to 4 characters.
 - **Canonical** - Each binary string has exactly one unpadded encoding and one padded encoding. `decode()` rejects
   anything else, so equal encodings always mean equal data.
@@ -77,15 +79,15 @@ Decode a base64 string into a binary string. Padding is optional.
 
 **Throws:**
 
-- `FormatException` - If the string isn't a valid encoding, as described in [isValidEncoding()](#isvalidencoding).
+- `DomainException` - If the string isn't a valid encoding, as described in [isValidEncoding()](#isvalidencoding).
 
 **Examples:**
 
 ```php
 BetterBase64::decode('PW');    // 'f'
 BetterBase64::decode('PW--');  // 'f'
-BetterBase64::decode('PW-');   // FormatException: wrong amount of padding
-BetterBase64::decode('PX');    // FormatException: non-canonical
+BetterBase64::decode('PW-');   // DomainException: wrong amount of padding
+BetterBase64::decode('PX');    // DomainException: non-canonical
 ```
 
 ---

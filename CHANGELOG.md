@@ -16,8 +16,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   - `encode()` encodes a binary string, with optional padding.
   - `decode()` decodes an encoded string, with or without padding.
   - `isValidEncoding()` checks if a string is a valid encoding.
-- **Strict decoding.** `decode()` throws a `FormatException` (from `mossy2100/core`) for invalid characters, 4n + 1
-  digits, the wrong amount of padding, or a non-canonical encoding.
+- **Strict decoding.** `decode()` throws a `DomainException` for invalid characters, 4n + 1 digits, the wrong amount of
+  padding, or a non-canonical encoding.
 
 ### Changed
 

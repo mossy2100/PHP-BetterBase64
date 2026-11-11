@@ -4,114 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b763314cc9357eb9c2c69d97be3656e2",
-    "packages": [
-        {
-            "name": "mossy2100/core",
-            "version": "4.0.1",
-            "dist": {
-                "type": "path",
-                "url": "../Core",
-                "reference": "6df283eeb3b61fa2f763816e93d490ef6dfc59ea"
-            },
-            "require": {
-                "ext-intl": "*",
-                "ext-mbstring": "*",
-                "php": "^8.4"
-            },
-            "require-dev": {
-                "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
-                "mossy2100/coding-standard": "^2.1",
-                "phpstan/phpstan": "^2.1",
-                "phpunit/phpunit": "^10.0 || ^11.0 || ^12.0",
-                "squizlabs/php_codesniffer": "^4.0"
-            },
-            "suggest": {
-                "phpunit/phpunit": "Required to use the FloatAssertions trait in your tests."
-            },
-            "type": "library",
-            "extra": {
-                "phpcodesniffer-search-depth": 3
-            },
-            "autoload": {
-                "psr-4": {
-                    "Mossy2100\\Core\\": "src/"
-                },
-                "files": [
-                    "src/globals.php"
-                ]
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Mossy2100\\Core\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "fix": [
-                    "vendor/bin/phpcbf -vp"
-                ],
-                "check": [
-                    "vendor/bin/phpcs -sv --colors"
-                ],
-                "report": [
-                    "vendor/bin/phpcs -q --report=summary"
-                ],
-                "analyze": [
-                    "scripts/analyze"
-                ],
-                "test": [
-                    "@php -d xdebug.mode=coverage vendor/bin/phpunit --coverage-html build/coverage --coverage-clover build/logs/clover.xml --do-not-cache-result"
-                ],
-                "coverage": [
-                    "@php scripts/coverage-check.php"
-                ],
-                "coverage-report": [
-                    "open build/coverage/index.html"
-                ],
-                "quality": [
-                    "@fix",
-                    "@check",
-                    "@analyze",
-                    "@test",
-                    "@coverage"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Shaun Moss",
-                    "email": "mossy2100@gmail.com"
-                }
-            ],
-            "description": "Core PHP utilities for floats, integers, arrays, types, and string conversion with IEEE-754 support.",
-            "homepage": "https://github.com/mossy2100/PHP-Core",
-            "keywords": [
-                "arrays",
-                "comparable",
-                "equatable",
-                "floats",
-                "ieee-754",
-                "integers",
-                "math",
-                "numbers",
-                "php",
-                "stringify",
-                "traits",
-                "types",
-                "utilities"
-            ],
-            "support": {
-                "issues": "https://github.com/mossy2100/PHP-Core/issues",
-                "source": "https://github.com/mossy2100/PHP-Core"
-            },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
-        }
-    ],
+    "content-hash": "9a7ffc12d7ff1679066b6ba3828f745c",
+    "packages": [],
     "packages-dev": [
         {
             "name": "dealerdirect/phpcodesniffer-composer-installer",
@@ -216,7 +110,7 @@
             "dist": {
                 "type": "path",
                 "url": "../CodingStandard",
-                "reference": "fd18590bb5ecfd727b9990cda2e70f4cd9c3a694"
+                "reference": "5e923666cdeb26f5e86b2a27ee4b7a2c0cf021b0"
             },
             "require": {
                 "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
