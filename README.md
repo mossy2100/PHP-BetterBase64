@@ -54,12 +54,18 @@ BetterBase64::encode(pack('J', 1800000000000));  // '0001enXSK00'  2027-01-15
 
 ### Digits you already know
 
-The alphabet is four groups, each in its natural order: the 10 decimal digits, the 26 upper-case letters, the 26
-lower-case letters, then `{` and `}`.
+The alphabet is four groups, each having a natural order:
+
+| Digits | Values |
+| ------ | ------ |
+| `0-9`  | 0-9    |
+| `A-Z`  | 10-35  |
+| `a-z`  | 36-61  |
+| `{}`   | 62-63  |
 
 - Digit values match **decimal** for `0-9`, **upper-case hexadecimal** for `0-F`, and **base32hex** ([RFC 4648](https://www.rfc-editor.org/rfc/rfc4648#section-7))
   for `0-V`.
-- So `5` is 5, `F` is 15 and `V` is 31, exactly as you'd expect. Anyone can read a digit's value at a glance.
+- So `9` is 9, `F` is 15 and `V` is 31, exactly as you'd expect. Anyone can read a digit's value at a glance.
 
 ### Safe in HTML and filenames
 
@@ -75,15 +81,14 @@ Encoded strings can go into HTML attributes, JSON, filenames and identifiers wit
 is a safer pad character than base64's `=`, which is a delimiter in URL query strings.
 
 > [!IMPORTANT]
-> **BetterBase64 isn't URL-safe.** RFC 3986 doesn't allow `{` and `}` in URLs, so `rawurlencode()` escapes them as `%7B`
-> and `%7D`.
+> **BetterBase64 isn't technically URL-safe.** RFC 3986 doesn't allow `{` and `}` in URLs, so `rawurlencode()`
+> escapes them as `%7B` and `%7D`.
 >
 > In practice, browsers accept `{` and `}` in URLs, so a link containing an encoded string works without escaping.
 > However, a browser may percent-encode them in the path before sending the request, so decode the URL path (most
 > frameworks do this already) before decoding the string.
 >
-> If you need URL-safe strings and don't need sort order, use base64url
-> ([RFC 4648 §5](https://www.rfc-editor.org/rfc/rfc4648#section-5)) instead:
+> If you need URL-safe strings and don't need sort order, use base64url ([RFC 4648 §5](https://www.rfc-editor.org/rfc/rfc4648#section-5)) instead:
 >
 > ```php
 > $encoded = rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
@@ -124,8 +129,7 @@ This package was developed with [Claude Code](https://claude.com/product/claude-
 
 The code is checked with:
 
-- [PHP_CodeSniffer](https://github.com/PHPCSStandards/PHP_CodeSniffer/), for [PSR-12](https://www.php-fig.org/psr/psr-12/)
-  compliance plus the Mossy2100 coding standard
+- [PHP_CodeSniffer](https://github.com/PHPCSStandards/PHP_CodeSniffer/), for [PSR-12](https://www.php-fig.org/psr/psr-12/) compliance plus the Mossy2100 coding standard
 - [PHPStan](https://phpstan.org/), at level 9
 - [PHPUnit](https://phpunit.de/index.html), with 100% code coverage
 
